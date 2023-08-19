@@ -20,7 +20,7 @@ namespace dz_asp_mvc_db.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<UserModel> users = _context.Users.ToList(); // Получите список пользователей из базы данных
+            List<UserModel> users = _context.Users.ToList();
             return View(users);
         }
 
@@ -47,7 +47,7 @@ namespace dz_asp_mvc_db.Controllers
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            return View("Index");
+            return View("Index", _context.Users.ToList());
         }
 
         public IActionResult Privacy()
