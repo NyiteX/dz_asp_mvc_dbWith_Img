@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+
+<div class="text-center">
+    <h1>Login</h1>
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+    <form method="post">
+        <label>Name:</label><br />
+        <input type="text" name="name" maxlength="15" required /><br />
+        <label>Password:</label><br />
+        <input type="password" name="password" maxlength="15" required /><br />
+        <input type="submit" value="Sign up" />
+    </form>
+
+</div>
