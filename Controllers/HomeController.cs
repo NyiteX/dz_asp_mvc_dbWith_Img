@@ -85,30 +85,26 @@ namespace dz_asp_mvc_db.Controllers
         }
 
         [HttpPost]
-        /*public async Task<IActionResult> Registration(string name, string password, string email)*/
-        public IActionResult Registration(string name, string password, string email)
+        public async Task<IActionResult> Registration(string name, string password, string email)
+        /*public IActionResult Registration(string name, string password, string email)*/
         {
             byte[] pic;
             string imagePath = "Pictures/2.ico";
             using (FileStream fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
             {
                 pic = new byte[fs.Length];
-                fs.Read(pic, 0, pic.Length);
+                await fs.ReadAsync(pic, 0, pic.Length);
             }
 
             UserModel user = new UserModel(Id: null, Login: name, Password: HashClass.ToSHA256(password),
                                             Email: email, Pic: pic);
 
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return View("Index", _context.Users.ToList());          
+            return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
     }
 }
