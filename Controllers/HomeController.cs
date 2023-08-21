@@ -22,8 +22,16 @@ namespace dz_asp_mvc_db.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult Index()
+        {
+            List<ProductModel> products = _context.Products.ToList();
+            return View(products);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult Users()
         {
             List<UserModel> users = _context.Users.ToList();
             return View(users);
@@ -104,7 +112,32 @@ namespace dz_asp_mvc_db.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Authorize]
+        public IActionResult CreateProduct()
+        {
+            return View();
+        }
 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(string Name, string Discription, double Price, long Count, IFormFile Image)
+        {
+            if (Image != null && Image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Image.CopyToAsync(memoryStream);
+                    byte[] imageBytes = memoryStream.ToArray();
+
+                    ProductModel product = new ProductModel(Id: null, Name, Discription, Price, Count, imageBytes);
+                    _context.Products.Add(product);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }

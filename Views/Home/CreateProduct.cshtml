@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Create Product Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>New Product</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" name="Name" maxlength="15" required class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Discription">Discription:</label>
+                <input type="text" name="Discription" maxlength="150" required class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Price">Price:</label>
+                <input type="number" name="Price" required class="form-control" id="price"/>
+            </div>
+            <div class="form-group">
+                <label for="Count">Count:</label>
+                <input type="number" name="Count" required class="form-control" id="count"/>
+            </div>
+            <div class="form-group">
+                <label for="Image">Image:</label>
+                <input type="file" name="Image" accept="image/*" required class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+    </div>
+</body>
+<script>
+    var maxLength = 9;
+    document.getElementById("count").oninput = function () {
+        if (this.value.length > maxLength) {
+            this.value = this.value.slice(0, maxLength);
+        }
+    }
+    document.getElementById("price").oninput = function () {
+        if (this.value.length > maxLength) {
+            this.value = this.value.slice(0, maxLength);
+        }
+    }
+</script>
+</html>

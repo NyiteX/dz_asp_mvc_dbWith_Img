@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/dz_asp_mvc_db.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -17,21 +18,30 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Index</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Registration">Registration</a>
+                        </li>   
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Users">Users</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
-                        {
-                            <li>
-                            <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
-                                 @Html.AntiForgeryToken()
-                                <button type="submit">Logout</button>
-                            </form>
-                            </li>
-                        }
+                         {
+                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateProduct">Create Product</a>
+                             </li>
+                         }
                     </ul>
+                </div>
+                <div class="justify-content-end">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-danger" type="submit">Logout</button>
+                        </form>
+                    }
                 </div>
             </div>
         </nav>

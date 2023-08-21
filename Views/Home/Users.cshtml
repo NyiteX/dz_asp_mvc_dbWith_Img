@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Users Page";
+}
+@model List<UserModel>
+
+<div class="users-container">
+    <h1>Users</h1>
+    @foreach (var user in Model)
+    {
+        <div class="user-card">
+            <label>Id: @user.Id</label><br />
+            <label>Login: @user.Login</label><br />
+            <label>Email: @user.Email</label><br />
+            <img src="@Url.Content($"data:image/png;base64, {Convert.ToBase64String(user.Pic)}")" /><br />
+        </div>
+    }
+</div>
