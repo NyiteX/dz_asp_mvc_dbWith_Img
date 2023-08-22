@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "User Page";
+}
+@model UserModel
+
+<div class="users-container">
+    <h1>Your Account</h1>
+        <div class="user-card">
+            <label>Id: @Model.Id</label><br />
+            <label>Login: @Model.Login</label><br />
+            <label>Email: @Model.Email</label><br />
+            <img src="@Url.Content($"data:image/png;base64, {Convert.ToBase64String(Model.Pic)}")" /><br />
+        </div>
+        <button class="btn-group">BTN</button>
+</div>

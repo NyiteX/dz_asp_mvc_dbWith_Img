@@ -34,12 +34,22 @@
                          }
                     </ul>
                 </div>
-                <div class="justify-content-end">
+                <div class="justify-content-end d-inline-flex">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
+                        <form asp-controller="Account" asp-action="Index" method="get">
+                            <button class="btn btn-secondary" type="submit">Account</button>
+                        </form>
+
+                        <form asp-controller="Home" asp-action="Logout" method="post">
                             @Html.AntiForgeryToken()
                             <button class="btn btn-danger" type="submit">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="Home" asp-action="Login" method="get">
+                            <button class="btn btn-info" type="submit">Login</button>
                         </form>
                     }
                 </div>
