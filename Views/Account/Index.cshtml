@@ -11,5 +11,14 @@
             <label>Email: @Model.Email</label><br />
             <img src="@Url.Content($"data:image/png;base64, {Convert.ToBase64String(Model.Pic)}")" /><br />
         </div>
-        <button class="btn-group">BTN</button>
+
+        <div class="d-inline-flex justify-content-between">
+            <form asp-controller="Account" asp-action="Edit" method="get">
+                <button class="btn-success" type="submit">Edit</button>
+            </form>
+
+            <form asp-controller="Account" asp-action="Delete" method="post">
+                <button class="btn-danger" type="submit">Delete</button>
+            </form>
+        </div>
 </div>

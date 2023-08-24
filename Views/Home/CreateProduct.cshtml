@@ -35,11 +35,11 @@
             </div>
             <div class="form-group">
                 <label for="Price">Price:</label>
-                <input type="number" name="Price" required class="form-control" id="price"/>
+                <input type="number" name="Price" required class="form-control" id="price" min="0"/>
             </div>
             <div class="form-group">
                 <label for="Count">Count:</label>
-                <input type="number" name="Count" required class="form-control" id="count"/>
+                <input type="number" name="Count" required class="form-control" id="count" min="0"/>
             </div>
             <div class="form-group">
                 <label for="Image">Image:</label>
@@ -55,10 +55,16 @@
         if (this.value.length > maxLength) {
             this.value = this.value.slice(0, maxLength);
         }
+        if(this.value < 0){
+            this.value = 0;
+        }
     }
     document.getElementById("price").oninput = function () {
         if (this.value.length > maxLength) {
             this.value = this.value.slice(0, maxLength);
+        }
+        if (this.value < 0) {
+            this.value = 0;
         }
     }
 </script>

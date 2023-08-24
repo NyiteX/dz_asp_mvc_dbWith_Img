@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace dz_asp_mvc_db.Controllers
 {
@@ -22,6 +24,79 @@ namespace dz_asp_mvc_db.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            var user = await GetUser_From_CookieAsync();
+
+            return View(user);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit()
+        {
+            UserModel userTmp = await GetUser_From_CookieAsync();
+
+            return View(userTmp);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(string? name, string? password, string? email, IFormFile image)
+        {
+            UserModel userTmp = await GetUser_From_CookieAsync();
+            if(name != null){   userTmp.Login = name;   }
+            if(password != null) { userTmp.Password = HashClass.ToSHA256(password); }
+            if(email != null) { userTmp.Email = email; }
+            if (image != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await image.CopyToAsync(memoryStream);
+                    byte[] imageBytes = memoryStream.ToArray();
+
+                    userTmp.Pic = imageBytes;
+                }
+            }
+
+            _context.Users.Update(userTmp);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Account");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Delete()
+        {
+            UserModel userTmp = await GetUser_From_CookieAsync();
+            _context.RemoveRange(userTmp);
+            await _context.SaveChangesAsync();
+
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Buy(int? count, int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            product.Count -= count;
+
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
+
+
+        public async Task<UserModel> GetUser_From_CookieAsync()
+        {
             var context = HttpContext;
             var authResult = await context.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -34,9 +109,7 @@ namespace dz_asp_mvc_db.Controllers
             name = nameClaim.Value;
             password = emailClaim.Value;
 
-            var user = _context.Users.FirstOrDefault(u => u.Login == name && u.Password == HashClass.ToSHA256(password));
-
-            return View(user);
+            return _context.Users.FirstOrDefault(u => u.Login == name && u.Password == HashClass.ToSHA256(password));
         }
     }
 }

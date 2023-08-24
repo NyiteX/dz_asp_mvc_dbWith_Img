@@ -15,8 +15,8 @@ builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServe
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => 
 {
     options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(10); // Продолжительность срока действия куки
-    options.LoginPath = "/Home/Login"; // Путь к странице авторизации
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    options.LoginPath = "/Home/Login";
     options.SlidingExpiration = true;
 });
 builder.Services.AddAuthorization();

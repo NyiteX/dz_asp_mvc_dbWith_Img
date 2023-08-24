@@ -2,18 +2,42 @@
     ViewData["Title"] = "Home Page";
 }
 @model List<ProductModel>
-
-    <div class="users-container">
-        <h1>Products</h1>
+    <h1>Products</h1>
+    <div class="product-container">
+        
         @foreach (var product in Model)
         {
-        <div class="user-card flex-column" style="background-image: url('@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")');">
-            <label>Name: @product.Name</label><br />
-            <label>Discription: @product.Discription</label><br />
-            <label>Count: @product.Count</label><br />
-            <label>Price: @product.Price</label><br />
+        <div class="flex-column animation">
+             <div class="product-card flex-column" style="background-image: url('@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")');">
+                <div class="background-shadow align-self-center text-center">
+                <h2 class="text-white">@product.Name</h2><br /><br />
+                
+                <label class="text-info">Count: </label>
+                <label class="text-white">@product.Count</label><br />
+
+                <label class="text-warning">Price:</label>
+                <label class="text-white">@product.Price</label><br />
+
+                <h4 class="text-white">Discription:</h4>
+                <p class="description-text text-white">@product.Discription</p>
+               
             @*<img src="@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")" /><br />*@
+                </div>
             </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form asp-controller="Account" asp-action="Buy" method="post">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <div class="form-group d-inline-flex marginLeft-20">
+                        @*<label for="count">Count:</label>*@                       
+                        <button type="submit" class="btn btn-danger">Buy</button>
+                        <input type="number" class="form-control count-width" name="count" placeholder="Count" required />
+                    </div>
+                    
+                </form>
+            }
+            
+        </div>
         }
     </div>
 

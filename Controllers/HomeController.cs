@@ -21,6 +21,7 @@ namespace dz_asp_mvc_db.Controllers
             _context = context;
         }
 
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Index()
@@ -44,36 +45,13 @@ namespace dz_asp_mvc_db.Controllers
             return View();
         }
 
-
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string name, string password)
         {
-            bool f = _context.Users.Any(user => user.Login == name && user.Password == HashClass.ToSHA256(password));
-            if (!f)
-            {
-                ModelState.AddModelError("", "Wrong login or password.");
-                return View();
-            }
+            await Login_method(name, password);
 
-           /* int? userId = _context.Users
-                        .Where(user => user.Login == name && user.Password == HashClass.ToSHA256(password))
-                        .Select(user => user.Id)
-                        .FirstOrDefault();*/
-
-            var claims = new List<Claim>
-            {
-                /*new Claim(ClaimTypes.NameIdentifier, userId.ToString()),*/
-                new Claim(ClaimTypes.Name, name),
-                new Claim(ClaimTypes.Email, password)
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         [HttpPost]
@@ -85,7 +63,6 @@ namespace dz_asp_mvc_db.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [HttpGet]
         public IActionResult Registration()
         {
@@ -94,7 +71,6 @@ namespace dz_asp_mvc_db.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Registration(string name, string password, string email)
-        /*public IActionResult Registration(string name, string password, string email)*/
         {
             byte[] pic;
             string imagePath = "Pictures/2.ico";
@@ -112,6 +88,7 @@ namespace dz_asp_mvc_db.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         [Authorize]
         public IActionResult CreateProduct()
@@ -139,5 +116,32 @@ namespace dz_asp_mvc_db.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        async Task Login_method(string name, string password)
+        {
+            bool f = _context.Users.Any(user => user.Login == name && user.Password == HashClass.ToSHA256(password));
+            if (!f)
+            {
+                ModelState.AddModelError("", "Wrong login or password.");
+                return;
+            }
+
+            /* int? userId = _context.Users
+                         .Where(user => user.Login == name && user.Password == HashClass.ToSHA256(password))
+                         .Select(user => user.Id)
+                         .FirstOrDefault();*/
+
+            var claims = new List<Claim>
+            {
+                /*new Claim(ClaimTypes.NameIdentifier, userId.ToString()),*/
+                new Claim(ClaimTypes.Name, name),
+                new Claim(ClaimTypes.Email, password)
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        }
     }
 }
