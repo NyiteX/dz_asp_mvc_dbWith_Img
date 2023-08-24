@@ -30,6 +30,19 @@ namespace dz_asp_mvc_db.Controllers
             return View(products);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Index(string? search)
+        {
+            var products = _context.Products.Where(u => u.Name.Contains(search)).ToList();
+
+            if (products == null)
+            {
+                return View();
+            }
+            return View(products);
+        }
+
         [HttpGet]
         [Authorize]
         public IActionResult Users()

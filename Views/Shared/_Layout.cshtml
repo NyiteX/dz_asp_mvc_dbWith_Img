@@ -13,10 +13,10 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
+            <div class="container-fluid" >
                 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
+                    <ul class="navbar-nav flex-grow-1 flex-wrap" >
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -32,8 +32,15 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateProduct">Create Product</a>
                              </li>
                          }
+                        <li class="nav-item " style="width:50%;">
+                            <form asp-controller="Home" asp-action="Index" method="post">
+                                <input type="text" name="search" placeholder="Search" style="width:80%;"/>
+                                <button type="submit" class="btn btn-dark">GO</button>
+                            </form>
+                         </li>
                     </ul>
                 </div>
+                
                 <div class="justify-content-end d-inline-flex">
                     @if (User.Identity.IsAuthenticated)
                     {
