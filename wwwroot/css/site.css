@@ -177,3 +177,8 @@ li{
 .margin-5 {
     margin: 5%;
 }
+
+.text-wrap {
+    overflow: hidden;
+    overflow-wrap:anywhere;
+}
