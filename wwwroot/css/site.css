@@ -164,3 +164,16 @@ li{
 .count-width{
     width:100px;
 }
+
+
+.img-width-350 {
+    background-size:contain;
+    max-width: 350px;
+    width:80%;
+}
+.margin-10{
+    margin:10%;
+}
+.margin-5 {
+    margin: 5%;
+}
