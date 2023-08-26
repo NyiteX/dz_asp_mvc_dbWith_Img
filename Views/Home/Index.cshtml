@@ -2,42 +2,83 @@
     ViewData["Title"] = "Home Page";
 }
 @model List<ProductModel>
-    <h1>Products</h1>
-    <div class="product-container">
-        
+
+
+
+ <div class="product-container">
+    @if (Model.Count > 0)
+    {
         @foreach (var product in Model)
         {
-        <div class="flex-column animation">
-             <div class="product-card flex-column" style="background-image: url('@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")');">
-                <div class="background-shadow align-self-center text-center">
-                <h2 class="text-white">@product.Name</h2><br /><br />
-                
-                <label class="text-info">Count: </label>
-                <label class="text-white">@product.Count</label><br />
-
-                <label class="text-warning">Price:</label>
-                <label class="text-white">@product.Price</label><br />
-
-                <h4 class="text-white">Discription:</h4>
-                <p class="description-text text-white">@product.Discription</p>
-               
-            @*<img src="@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")" /><br />*@
-                </div>
-            </div>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <form asp-controller="Account" asp-action="Buy" method="post">
+            <div class="flex-column animation">
+                <form id="form_@product.Id" asp-controller="Home" asp-action="Product" method="post">
                     <input type="hidden" name="productId" value="@product.Id" />
-                    <div class="form-group d-inline-flex marginLeft-20">
-                        @*<label for="count">Count:</label>*@                       
-                        <button type="submit" class="btn btn-danger">Buy</button>
-                        <input type="number" class="form-control count-width" name="count" placeholder="Count" required />
-                    </div>
-                    
-                </form>
-            }
-            
-        </div>
-        }
-    </div>
+                    <div class="product-card flex-column" style="background-image: url('@Url.Content($"data:image/png;base64, {Convert.ToBase64String(product.Pic)}")');"
+                         onclick="submitForm('@product.Id')">
+                        <div class="background-shadow align-self-center text-center">
+                            <h2 class="text-white">@product.Name</h2><br /><br />
 
+                            <label class="text-info">Count: </label>
+                            <label class="text-white">@product.Count</label><br />
+
+                            <label class="text-warning">Price:</label>
+                            <label class="text-white">@product.Price</label><br />
+
+                            <h4 class="text-white">Description:</h4>
+                            <p class="description-text text-white">@product.Discription</p>
+                        </div>
+                    </div>
+                </form>
+                @if (User.Identity.IsAuthenticated )
+                {
+                    <form asp-controller="Account" asp-action="Buy" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <div class="form-group d-inline-flex marginLeft-20">
+                            <button type="submit" class="btn btn-danger" @if (product.Count == 0)
+                            {
+                                <text>disabled</text>
+                            }>
+                            Buy</button>
+                            <input type="number" class="form-control count-width" name="count"
+                                   placeholder="Count" min="1" max="@product.Count" id="count_buy_@product.Id" required
+                            @if (product.Count == 0)
+                            {
+                                <text>disabled</text>
+                            } />
+                        </div>
+                    </form>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <h1 class="align-self-center">No results for</h1>
+    }
+</div>
+
+
+<script>
+    var countInputs = document.querySelectorAll('.count-width');
+
+    countInputs.forEach(function (input) {
+        var max = parseInt(input.getAttribute('max'));
+        var min = parseInt(input.getAttribute('min'));
+
+        input.addEventListener('input', function () {
+            if (this.value > max) {
+                this.value = max;
+            }
+            if (this.value < min) {
+                this.value = min;
+            }
+        });
+    });
+
+    function submitForm(productId) {
+        var form = document.getElementById('form_' + productId);
+        if (form) {
+            form.submit();
+        }
+    }
+</script>

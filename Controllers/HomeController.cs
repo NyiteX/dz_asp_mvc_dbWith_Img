@@ -38,7 +38,7 @@ namespace dz_asp_mvc_db.Controllers
 
             if (products == null)
             {
-                return View();
+                return View(search);
             }
             return View(products);
         }
@@ -62,7 +62,12 @@ namespace dz_asp_mvc_db.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(string name, string password)
         {
-            await Login_method(name, password);
+            var loginSuccess = await Login_method(name, password);
+
+            if (!loginSuccess)
+            {
+                return View("Login");
+            }
 
             return RedirectToAction("Index", "Account");
         }
@@ -129,14 +134,37 @@ namespace dz_asp_mvc_db.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Product(int? productId)
+        {
+            var product = _context.Products.FirstOrDefault(u => u.Id == productId);
+            if (product == null)
+            {
+                Console.WriteLine("-------------NE NAIDENO-------------------");
+                return RedirectToAction("Index");
+            }
+            return View(product);
+        }
 
-        async Task Login_method(string name, string password)
+
+
+
+
+
+
+
+
+        //
+        // My functions
+        //
+        async Task<bool> Login_method(string name, string password)
         {
             bool f = _context.Users.Any(user => user.Login == name && user.Password == HashClass.ToSHA256(password));
             if (!f)
             {
                 ModelState.AddModelError("", "Wrong login or password.");
-                return;
+                return false;
             }
 
             /* int? userId = _context.Users
@@ -155,6 +183,10 @@ namespace dz_asp_mvc_db.Controllers
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return true;
         }
+
+
     }
 }

@@ -9,13 +9,11 @@ namespace dz_asp_mvc_db.Classes
     {
         public DbSet<UserModel> Users { get; set; } = null!;
         public DbSet<ProductModel> Products { get; set; } = null!;
+        public DbSet<CartModel> Cart { get; set; } = null!;
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             Database.EnsureCreated();
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserModel>().HasKey(u => u.Id);
         }
     }
 }

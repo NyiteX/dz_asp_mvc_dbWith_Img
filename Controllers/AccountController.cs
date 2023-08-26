@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
+using System.Linq;
 
 namespace dz_asp_mvc_db.Controllers
 {
@@ -82,10 +85,25 @@ namespace dz_asp_mvc_db.Controllers
         public async Task<IActionResult> Buy(int? count, int productId)
         {
             var product = await _context.Products.FindAsync(productId);
+            if (product == null) return RedirectToAction("Index", "Home");
 
+            var user = await GetUser_From_CookieAsync();
+
+            var editproduct = await _context.Cart.Where(u => u.ProductId == productId).FirstOrDefaultAsync();
+            if (editproduct != null)
+            {
+                editproduct.Count += count;
+                _context.Cart.Update(editproduct);
+            }
+            else
+            {
+                var cartmodel = new CartModel(null, user.Id, productId, count);
+                _context.Cart.Add(cartmodel);
+            }
+            
             product.Count -= count;
-
             _context.Products.Update(product);
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");
