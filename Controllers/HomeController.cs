@@ -36,9 +36,10 @@ namespace dz_asp_mvc_db.Controllers
         {
             var products = _context.Products.Where(u => u.Name.Contains(search)).ToList();
 
-            if (products == null)
+            if (products.Count < 1)
             {
-                return View(search);
+                ViewData["Notfound"] = search;
+                return View(products);
             }
             return View(products);
         }

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/dz_asp_mvc_db.styles.css" asp-append-version="true" />
 
 </head>
-<body>
+<body class="img-parallax2">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid" >
@@ -63,16 +63,16 @@
                         </form>
                     }
                 </div>
-            </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container main-container">
         <main role="main" class="pb-3">
             @RenderBody()
+            <div class="wrapper"></div>
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background-color:white">
         <div class="container">
             &copy; 2023
         </div>
@@ -80,6 +80,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @*<script src="~/js/parallax.js"></script>*@
+    <script src="~/js/parallax2.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    </div>
 </body>
 </html>
