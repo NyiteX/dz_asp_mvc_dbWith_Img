@@ -76,7 +76,7 @@ namespace dz_asp_mvc_db.Controllers
             name = nameClaim.Value;
             password = emailClaim.Value;
 
-            return _context.Users.FirstOrDefault(u => u.Login == name && u.Password == HashClass.ToSHA256(password));
+            return _context.Users.FirstOrDefault(u => u.Login == name && u.Password == password);
         }
     }
 }

@@ -176,7 +176,7 @@ namespace dz_asp_mvc_db.Controllers
             {
                 /*new Claim(ClaimTypes.NameIdentifier, userId.ToString()),*/
                 new Claim(ClaimTypes.Name, name),
-                new Claim(ClaimTypes.Email, password)
+                new Claim(ClaimTypes.Email, HashClass.ToSHA256(password))
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
